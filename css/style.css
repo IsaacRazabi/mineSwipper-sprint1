@@ -1,6 +1,34 @@
 body {background-color: black; color:white}
-.cell {width:80px; height:80px;text-align: center}
+.cell {width:80px; height:80px;text-align: center;background-color:rgb(7, 49, 83);padding-top:50px;}
 .cell:hover{
     background-color: blueviolet;
 }
 .floor {background-color:rgb(7, 49, 83)}
+
+.mine{
+   background-color: red;;
+}
+
+.gameStat{
+    padding-bottom: 100px;
+    color: brown;
+    text-align: center;
+}
+table {
+    margin: auto;
+}
+
+.footer {
+    text-align: center;
+    padding-top: 30px;
+    color: blueviolet;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: larger;
+}
+
+.headLine{
+    color: blueviolet;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: larger;
+    text-align: center;
+}

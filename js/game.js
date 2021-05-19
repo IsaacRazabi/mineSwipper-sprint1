@@ -6,15 +6,19 @@ var gLevel = {
   MINES: 2,
 };
 var gCount = gLevel.SIZE;
-var gCell = {
-  minesAroundCount: 4,
-  isShown: true,
-  isMine: false,
-  isMarked: true,
-};
+// var gCell = {
+//   minesAroundCount: 4,
+//   isShown: true,
+//   isMine: false,
+//   isMarked: true,
+// };
 
 var gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 };
 const MINE = "💣";
+const FLAG = '🚩'
+var  gIsHitMine = false;
+
+init();
 
 function init() {
   gBoard = buildBoard();
@@ -37,26 +41,24 @@ function buildBoard() {
   var board = createMat(gLevel.SIZE);
   for (var i = 0; i < board.length; i++) {
     for (var j = 0; j < board.length; j++) {
-      board[i][j] = gCell;
+      var cell = {
+        minesAroundCount: 4,
+        isShown: true,
+        isMine: false,
+        isMarked: true,
+      };
+      board[i][j] = cell;
     }
   }
   // changing .ismine change all the mat !
-  board[drawNum().i][drawNum().j] = {
-    minesAroundCount: 4,
-    isShown: true,
-    isMine: true,
-    isMarked: true,
-  };
-  board[drawNum().i][drawNum().j] = {
-    minesAroundCount: 4,
-    isShown: true,
-    isMine: true,
-    isMarked: true,
-  };
+
   return board;
 }
 
 function renderBoard(board) {
+  board[drawNum().i][drawNum().j].isMine = true;
+  board[drawNum().i][drawNum().j].isMine = true;
+
   var strHTML = "";
   for (var i = 0; i < board.length; i++) {
     strHTML += "<tr>\n";
@@ -65,18 +67,17 @@ function renderBoard(board) {
       var cellClass = getClassName({ i: i, j: j }); // returne string of form : 'cell-0-0'
       cellClass += " floor ";
       //gice them class of mine
-      if (board[i][j].isMine) {
-        cellClass += "mine";
-      }
+    //   if (board[i][j].isMine) {
+    //     cellClass += "mine";
+    //   }
       strHTML += `\t<td  class="cell ${cellClass}" onclick="cellClicked(${i},${j})" >\n`;
-      if (board[i][j].isMine) {
-        strHTML += MINE;
-      }
-      strHTML += `\t</td>\n`;
+    //   if (board[i][j].isMine) {
+    //       strHTML +=`${MINE}` ;
+    //   }
+      strHTML += `\t</td>\n`
     }
     strHTML += `</tr>\n`;
   }
-
   var elBoard = document.querySelector(".board");
   elBoard.innerHTML = strHTML;
 }
@@ -109,19 +110,39 @@ function countMineNegs(mat, pos) {
       if (mat[i][j].isMine) {
         count++;
       } else {
-        positions.push({i,j});
+        positions.push({ i, j });
       }
     }
   }
+
   for (var i = 0; i < positions.length; i++) {
-    renderCell(positions[i], count);
+    neg(gBoard, positions[i]);
   }
+  renderCell(pos, count);
+}
+function neg(mat, positions) {
+  var count = 0;
+  for (var i = positions.i - 1; i <= positions.i + 1; i++) {
+    if (i < 0 || i > mat.length - 1) continue;
+    for (var j = positions.j - 1; j <= positions.j + 1; j++) {
+      if (j < 0 || j > mat.length - 1) continue;
+      if (mat[i][j].isMine) {
+        count++;
+      }
+    }
+  }
+  renderCell(positions, count);
 }
 
 function cellClicked(posI, posJ) {
-  gCell.isShown = false;
-  if (!gBoard[posI][posJ].isMine) countMineNegs(gBoard, { i: posI, j: posJ });
-  else {
+  gBoard[posI][posJ].isShown = false;
+  if (!gBoard[posI][posJ].isMine) {
+    countMineNegs(gBoard, { i: posI, j: posJ });
+  } else {
+    var cellSelector = "." + getClassName({ i: posI, j: posJ });
+    var elCell = document.querySelector(cellSelector);
+    elCell.classList.toggle('mine')
+    renderCell({ i: posI, j: posJ },MINE)
     gameOver();
   }
 }
@@ -146,5 +167,19 @@ function renderCell(location, value) {
 }
 
 function gameOver() {
-  init();
+  var elGameStat = document.querySelector('.gameStat');
+  elGameStat.innerText = 'game over !'
+  setTimeout(init,2000) 
 }
+
+
+function handleKey(event) {
+    var i = gBoard.i;
+    var j = gBoard.j;
+  
+    switch (event.MouseEvent) {
+      case "oncontextmenu":
+        renderCell({i:i, j:j},FLAG)
+        break;
+    }
+  }
