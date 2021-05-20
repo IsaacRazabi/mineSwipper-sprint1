@@ -5,41 +5,43 @@ var gInterval;
 var gTrueFlages = 0;
 var gIsFirstMove = true;
 var gLevel = {
-        SIZE: 4,
-        MINES: 2,
-}
+  SIZE: 4,
+  MINES: 2,
+};
 
 var gCount = gLevel.SIZE;
 var gGame = {
-    isOn: false,
-    shownCount: 0,
-    markedCount: 0,
-    secsPassed: 0,
+  isOn: false,
+  shownCount: 0,
+  markedCount: 0,
+  secsPassed: 0,
 };
 const MINE = "💣";
 const FLAG = "🚩";
 var gIsHitMine = false;
 var gIsFlag = false;
+var gLife = 3;
+var gLastPos = [];
+init();
 
- init();
-
-function init() {  
+function init() {
   gBoard = buildBoard();
-  document.querySelector(".win").innerText= '🙂';
-  var time = 0;
+  document.querySelector(".win").innerText = "🙂";
+//   var time = 0;
   gIsFirstMove = true;
   gGame.markedCount = 0;
   gGame.shownCount = 0;
   gTrueFlages = 0;
-  gInterval = setInterval(function () {
-    time += 1;
-    var elTimePassed = document.querySelector(".timePassed");
-    elTimePassed.innerText = `${time}`;
-  }, 1000);
+  gLife = 3;
+
+//   startTimer()
+//   gInterval = setInterval(function () {
+//     time += 1;
+//     var elTimePassed = document.querySelector(".timePassed");
+//     elTimePassed.innerText = `${time}`;
+//   }, 1000);
   renderBoard(gBoard);
 }
-
-
 
 // create an empty matrix
 function createMat(length) {
@@ -99,6 +101,8 @@ function renderBoard(board) {
   statsShown.innerText = `cells showen : ${gGame.shownCount} `;
   var statsMarked = document.querySelector(".statsMarked");
   statsMarked.innerText = `cells marked : ${gGame.markedCount} `;
+  var elLife = document.querySelector(".life");
+  elLife.innerText = ` lives left : ${gLife}`;
 }
 
 function getClassName(location) {
@@ -170,33 +174,53 @@ function neg(mat, positions) {
 
 function cellClicked(posI, posJ) {
   if (gIsFirstMove) {
-for (var i = 0;i< gLevel.MINES; i++) {
-    gBoard[drawNum().i][drawNum().j].isMine = true;    
-}
-// gBoard[drawNum().i][drawNum().j].isMine = true;
-//     gBoard[drawNum().i][drawNum().j].isMine = true;
+    for (var i = 0; i < gLevel.MINES; i++) {
+      gBoard[drawNum().i][drawNum().j].isMine = true;
+    }
+    startTimer();
+     var dateObjbegin = new Date();
+     var timeCounter = dateObjbegin.getTime();
+
+    // gBoard[drawNum().i][drawNum().j].isMine = true;
+    //     gBoard[drawNum().i][drawNum().j].isMine = true;
     gIsFirstMove = false;
   }
   gBoard[posI][posJ].isShown = false;
   if (gBoard[posI][posJ].isFlag) return;
-  gGame.shownCount++;
   var statsShown = document.querySelector(".statsShown");
   statsShown.innerText = `cells showen : ${gGame.shownCount} `;
   if (!gBoard[posI][posJ].isMine) {
+    if (gLastPos[0] === posI && gLastPos[1] === posJ) return;
+    gGame.shownCount++;
     countMineNegs(gBoard, { i: posI, j: posJ });
   } else {
+    gLife--;
+    var elLife = document.querySelector(".life");
+    elLife.innerText = ` lives left : ${gLife}`;
+    var cellSelector = "." + getClassName({ i: posI, j: posJ });
+    var elCell = document.querySelector(cellSelector);
+    elCell.classList.add("mine");
+    renderCell({ i: posI, j: posJ }, MINE);
+    setTimeout(() => {
+      gBoard[posI][posJ].isShown = true;
+      elCell.classList.remove("mine");
+      renderCell({ i: posI, j: posJ }, "");
+    }, 1000);
+
     for (var i = 0; i < gBoard.length; i++) {
       for (var j = 0; j < gBoard[0].length; j++) {
         if (!gBoard[i][j].isMine) continue;
+        if (gLife + 1 > 0) return;
         var cellSelector = "." + getClassName({ i: i, j: j });
         var elCell = document.querySelector(cellSelector);
-        elCell.classList.toggle("mine");
+        elCell.classList.add("mine");
         renderCell({ i: i, j: j }, MINE);
       }
     }
     gameOver();
   }
   cheakVictory();
+  gLastPos = [posI, posJ];
 }
 
 function drawNum() {
@@ -221,10 +245,11 @@ function renderCell(location, value) {
 function gameOver() {
   var elGameStat = document.querySelector(".gameStat");
   elGameStat.innerText = "game over !";
-  document.querySelector(".win").innerText='😤'
+  resetTimer();
+  document.querySelector(".win").innerText = "😤";
   setTimeout(init, 1000);
   clearInterval(gInterval);
-  gInterval=null;
+  gInterval = null;
 }
 
 function flag(event) {
@@ -242,7 +267,7 @@ function flag(event) {
       gTrueFlages--;
     }
   } else if (!isCellFlag.isFlag) {
-    if(!isCellFlag.isShown) return
+    if (!isCellFlag.isShown) return;
     pos.innerText = FLAG;
     isCellFlag.isFlag = true;
     gGame.markedCount++;
@@ -260,29 +285,56 @@ function cheakVictory() {
   var numOfCells = gLevel.SIZE ** 2;
   if (numOfCells - gGame.shownCount - gTrueFlages === 0) {
     alert("YOU WON !");
-    document.querySelector(".win").innerText='😎'
+
+
+
+stopTimer();
+const dateObjbeginFliped = new Date();
+timeCounterNow = dateObjbeginFliped.getTime();
+timePassed = parseInt((timeCounterNow - timeCounterFirstFlip) / 1000);
+if (timePassed > bestTime) {
+    if (firstWin === 0) {
+      bestTime = timePassed;
+      firstWin++;
+    }
+  } else {
+    bestTime = timePassed;
+  }
+  localStorage.setItem("currante time", timePassed);
+  localStorage.setItem("best time", bestTime);
+  time = localStorage.getItem("currante time");
+  winingTime = localStorage.getItem("best time");
+  
+  yourScore.innerHTML = `your score is: ${time}`;
+  bestScore.innerHTML = `the best time is : ${winingTime}`;
+  if (winingTime === time) {
+    // alert("you have reached the bset time ! well done ! ");
+  }
+
+
+    document.querySelector(".win").innerText = "😎";
+    resetTimer();
     setTimeout(init, 1000);
     clearInterval(gInterval);
-    gInterval=null;
+    gInterval = null;
   }
 }
 function gameLevel() {
-    var level = (document.querySelector(".level").value)
+  var level = document.querySelector(".level").value;
 
-    if (level === 'Medium' ) {
-        gLevel. SIZE = 8;
-        gLevel.MINES = 12;
-        clearInterval(gInterval)
-        gInterval=null;
-        init()
-    }
+  if (level === "Medium") {
+    gLevel.SIZE = 8;
+    gLevel.MINES = 12;
+    clearInterval(gInterval);
+    gInterval = null;
+    init();
+  }
 
-    if (level ===  'Expert' ) {
-            gLevel. SIZE = 12;
-            gLevel.MINES = 30;
-            clearInterval(gInterval)
-            gInterval=null;
-            init()
- }
+  if (level === "Expert") {
+    gLevel.SIZE = 12;
+    gLevel.MINES = 30;
+    clearInterval(gInterval);
+    gInterval = null;
+    init();
+  }
 }
-
