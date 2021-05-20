@@ -13,11 +13,30 @@
    welcome to <span> mine sweep </span>
         </h1>
     </div>
+ 
+    <div class="info">
+        <label for="level"> what level do you want to play ? </label>
+        <br /><br />
+        <select name="level" class="level">
+          <option value="Beginner">Beginner</option>
+          <option value="Medium">Medium</option>
+          <option value="Expert">Expert</option>
+          <br /><br />
+        </select>
+        <br /><br />
+        <button type="button" onclick="gameLevel()">choose level</button>
+        <div>
+
     <div > 
         <h2 class ="gameStat"></h2>
+        <div class="statsShown"></div>
+        <div class="statsMarked"></div>
+        <div class="timePassed"></div>
+    </div>
+    <div class="win" > 
     </div>
     <table>
-        <tbody class="board"></tbody>
+        <tbody oncontextmenu="javascript:flag(event);return false;" class="board"></tbody>
       </table>
       <div class="footer">
           created by : isaac razabi
