@@ -1,59 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="css/style.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mineSwipper</title>
-</head>
-<body >
+  </head>
+  <body onload="init()">
     <div class="headLine">
-        
-        <h1>
-   welcome to <span> mine sweep </span>   <div class ="gameStat"></div> 
-        </h1>
+      <h1>
+        welcome to <span> mine sweep </span>
+        <div class="gameStat"></div>
+      </h1>
     </div>
 
-    <div class="container"> 
     <div class="info">
-        <div class="win" > </div>  
-        <label for="level"> Tell us  <br /> what level do you want to play? </label>
-        <br /><br />
-        <select name="level" class="level">
-          <option value="Beginner">Beginner</option>
-          <option value="Medium">Medium</option>
-          <option value="Expert">Expert</option>
-        </select>
-        <button type="button" onclick="gameLevel()">choose level</button>
+      <div class="win"></div>
+      <label for="level">
+        Tell us <br />
+        what level do you want to play?
+      </label>
+      <br /><br />
+      <select name="level" class="level">
+        <option value="Beginner">Beginner</option>
+        <option value="Medium">Medium</option>
+        <option value="Expert">Expert</option>
+      </select>
+      <button type="button" onclick="gameLevel()">choose level</button>
+      <div>
+        <div class="life"></div>
         <div>
-
-            <div class= life>  </div>
-
-    <div > 
-        <div class="statsShown"></div>
-        <div class="statsMarked"></div>
-        <div class="yourScore"></div> 
-          <div class="bestScore"></div> </div> <br/>
+          <div class="statsShown"></div>
+          <div class="statsMarked"></div>
+          <div class="yourScore"></div>
+          <div class="bestScore"></div>
         </div>
-        
-        
-        <div class="timePassed"></div> <br/>
-
-</div>
+        <br />
+      </div>
+      <div class="timePassed"></div>
+      <br />
+    </div>
 
     <table>
-        <tbody oncontextmenu="javascript:flag(event);return false;" class="board"></tbody>
-      </table>
-      <br/>
-     
+      <tbody
+        oncontextmenu="javascript:flag(event);return false;"
+        class="board"
+      ></tbody>
+    </table>
+    <br />
 
-      <div class="footer">
-          created by : isaac razabi
-          <img src="img/86e382034ff7f6cf6767451f4b8e6aa4.jpg"/>
-      </div>
+    <div class="footer">
+      created by : isaac razabi
+      <img src="img/86e382034ff7f6cf6767451f4b8e6aa4.jpg" />
+    </div>
+
     <script src="js/game.js"></script>
     <script src="js/utilites.js"></script>
     <script src="js/watch.js"></script>
-</body>
+  </body>
 </html>

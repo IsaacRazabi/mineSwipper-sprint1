@@ -1,13 +1,9 @@
-body {
-  background-color:white;
-  color: black;
-}
 .info {
-    font-family: monospace;
-    text-align: center;
-    font-size: 30px;
-    padding-top: 30px;
-    float: left;
+  font-family: monospace;
+  text-align: center;
+  font-size: 30px;
+  padding-top: 30px;
+  float: left;
 }
 
 .cell {
@@ -19,15 +15,14 @@ body {
   border: rgb(49, 42, 42) 2px solid;
 }
 img {
-    width: 50PX;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 .cell:hover {
   background-color: blueviolet;
 }
-
 .life {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 h1 {
   font-family: monospace;
@@ -37,31 +32,14 @@ h1 {
   padding-right: 60%;
 }
 
-h2 {
-  margin: auto;
-  font-family: monospace;
-  text-align: center;
-  font-size: 30px;
-  padding-top: 30px;
-}
-/* img {
-    float: right;
-  } */
-/* 
-.floor {
-  background-color: rgb(7, 49, 83);
-} */
-
 .mine {
   background-color: red;
 }
 
 .gameStat {
-  /* float: left; */
-  /* padding-bottom: 100px; */
   color: brown;
-  /* text-align: center; */
 }
+
 table {
   margin: auto;
 }
@@ -70,59 +48,34 @@ table {
   font-family: monospace;
   text-align: center;
   font-size: 25px;
-  /* padding-top: 30px; */
-  /* display: inline-block; */
-  /* margin: auto; */
   padding-top: 10%;
   margin-top: 10%;
   float: right;
+  color: rgb(16, 16, 134);
 }
 
 .headLine {
   color: blueviolet;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: larger;
-  text-align: center;
 }
 .timePassed {
   font-size: 40px;
-  /* position: absolute; */
-  /* left: 15%;
-  top: 35%;  */
-  /* transform: translate(-50%, -55%); */
-  /* float: left; */
   padding-bottom: 15px;
+  color: blueviolet;
 }
 .win {
   text-align: center;
-  /* float: left; */
-  /* padding-left: 220px; */
- padding-bottom: 15px;
-
+  padding-bottom: 15px;
 }
-
 button {
   font: 20px black solid;
   background-color: rgb(214, 36, 214);
   transition: 1000ms;
   font-family: monospace;
 }
-
-input {
-  margin-bottom: 15px;
-
-}
-
-h1 span {
-  color: tomato;
-}
-
 button:hover {
   background-color: teal;
 }
 
-.footer {
-  font-family: monospace;
-  text-align: center;
-  font-size: 25px;
+h1 span {
+  color: tomato;
 }
