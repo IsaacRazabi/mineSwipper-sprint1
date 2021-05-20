@@ -25,6 +25,10 @@ img {
 .cell:hover {
   background-color: blueviolet;
 }
+
+.life {
+    padding-top: 20px;
+}
 h1 {
   font-family: monospace;
   text-align: center;
@@ -53,10 +57,10 @@ h2 {
 }
 
 .gameStat {
-  float: left;
-  padding-bottom: 100px;
+  /* float: left; */
+  /* padding-bottom: 100px; */
   color: brown;
-  text-align: center;
+  /* text-align: center; */
 }
 table {
   margin: auto;
@@ -66,9 +70,12 @@ table {
   font-family: monospace;
   text-align: center;
   font-size: 25px;
-  padding-top: 30px;
-  display: inline-block;
-  margin: auto;
+  /* padding-top: 30px; */
+  /* display: inline-block; */
+  /* margin: auto; */
+  padding-top: 10%;
+  margin-top: 10%;
+  float: right;
 }
 
 .headLine {
@@ -81,15 +88,17 @@ table {
   font-size: 40px;
   /* position: absolute; */
   /* left: 15%;
-  top: 35%; */
+  top: 35%;  */
   /* transform: translate(-50%, -55%); */
-  float: left;
-  padding-left: 70px;
+  /* float: left; */
+  padding-bottom: 15px;
 }
 .win {
   text-align: center;
-  float: left;
-  padding-left: 70px;
+  /* float: left; */
+  /* padding-left: 220px; */
+ padding-bottom: 15px;
+
 }
 
 button {
