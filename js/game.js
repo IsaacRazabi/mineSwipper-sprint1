@@ -27,6 +27,7 @@ init();
 function init() {
   gBoard = buildBoard();
   document.querySelector(".win").innerText = "🙂";
+  document.querySelector(".gameStat").innerText='';
 //   var time = 0;
   gIsFirstMove = true;
   gGame.markedCount = 0;
@@ -247,7 +248,7 @@ function gameOver() {
   elGameStat.innerText = "game over !";
   resetTimer();
   document.querySelector(".win").innerText = "😤";
-  setTimeout(init, 1000);
+  setTimeout(init, 2000);
   clearInterval(gInterval);
   gInterval = null;
 }
@@ -284,10 +285,7 @@ function flag(event) {
 function cheakVictory() {
   var numOfCells = gLevel.SIZE ** 2;
   if (numOfCells - gGame.shownCount - gTrueFlages === 0) {
-    alert("YOU WON !");
-
-
-
+ 
 stopTimer();
 const dateObjbeginFliped = new Date();
 timeCounterNow = dateObjbeginFliped.getTime();
@@ -313,8 +311,9 @@ if (timePassed > bestTime) {
 
 
     document.querySelector(".win").innerText = "😎";
+    document.querySelector(".gameStat").innerText='you won ! well done !';
     resetTimer();
-    setTimeout(init, 1000);
+    setTimeout(init, 2000);
     clearInterval(gInterval);
     gInterval = null;
   }
