@@ -1,6 +1,7 @@
 "use strict";
 
 var gBoard;
+var gInterval;
 var gLevel = {
   SIZE: 4,
   MINES: 2,
@@ -15,14 +16,22 @@ var gCount = gLevel.SIZE;
 
 var gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 };
 const MINE = "💣";
-const FLAG = '🚩'
-var  gIsHitMine = false;
+const FLAG = "🚩";
+var gIsHitMine = false;
+var gIsFlag = false;
 
 init();
 
 function init() {
   gBoard = buildBoard();
   renderBoard(gBoard);
+  var time= 0;
+  gInterval = setInterval(function() {
+    time += 1
+    var elTimePassed = document.querySelector(".timePassed");
+    elTimePassed.innerText = `${time}` 
+  }, 1000);
+
 }
 
 // create an empty matrix
@@ -36,7 +45,7 @@ function createMat(length) {
   }
   return mat;
 }
-// bealding the board and create every cell
+// bealding the MODAL  - KEEPING DATA
 function buildBoard() {
   var board = createMat(gLevel.SIZE);
   for (var i = 0; i < board.length; i++) {
@@ -46,6 +55,7 @@ function buildBoard() {
         isShown: true,
         isMine: false,
         isMarked: true,
+        isFlag: false,
       };
       board[i][j] = cell;
     }
@@ -55,6 +65,7 @@ function buildBoard() {
   return board;
 }
 
+// BULDING THE DISPLAY OF THE PAGE BY HTML
 function renderBoard(board) {
   board[drawNum().i][drawNum().j].isMine = true;
   board[drawNum().i][drawNum().j].isMine = true;
@@ -67,14 +78,14 @@ function renderBoard(board) {
       var cellClass = getClassName({ i: i, j: j }); // returne string of form : 'cell-0-0'
       cellClass += " floor ";
       //gice them class of mine
-    //   if (board[i][j].isMine) {
-    //     cellClass += "mine";
-    //   }
+      //   if (board[i][j].isMine) {
+      //     cellClass += "mine";
+      //   }
       strHTML += `\t<td  class="cell ${cellClass}" onclick="cellClicked(${i},${j})" >\n`;
-    //   if (board[i][j].isMine) {
-    //       strHTML +=`${MINE}` ;
-    //   }
-      strHTML += `\t</td>\n`
+      //   if (board[i][j].isMine) {
+      //       strHTML +=`${MINE}` ;
+      //   }
+      strHTML += `\t</td>\n`;
     }
     strHTML += `</tr>\n`;
   }
@@ -84,6 +95,14 @@ function renderBoard(board) {
 function getClassName(location) {
   var cellClass = "cell-" + location.i + "-" + location.j;
   return cellClass;
+}
+
+function getLocationByClassName (className){
+     var num = className.match(/\d/g);// reg exp : g =  work on all matches.
+     num = num.join("");
+     var locationI=num[0]
+     var locationJ=num[1]
+    return {i:locationI, j:locationJ}
 }
 
 function setMinesNegsCount(board) {}
@@ -109,16 +128,19 @@ function countMineNegs(mat, pos) {
       if (i === pos.i && j === pos.j) continue;
       if (mat[i][j].isMine) {
         count++;
-      } else {
+      } else  {
+          if (mat[i][j].isFlag === true) continue;
         positions.push({ i, j });
       }
     }
   }
-
-  for (var i = 0; i < positions.length; i++) {
-    neg(gBoard, positions[i]);
-  }
-  renderCell(pos, count);
+  if (count===0) {
+      for (var i = 0; i < positions.length; i++) {
+          neg(gBoard, positions[i]);
+        }
+    }
+    renderCell(pos, count);
+ 
 }
 function neg(mat, positions) {
   var count = 0;
@@ -135,14 +157,15 @@ function neg(mat, positions) {
 }
 
 function cellClicked(posI, posJ) {
+    var cellSelector = "." + getClassName({ i: posI, j: posJ });
+    var elCell = document.querySelector(cellSelector);
+    if (elCell.innerText === FLAG) return;
   gBoard[posI][posJ].isShown = false;
   if (!gBoard[posI][posJ].isMine) {
     countMineNegs(gBoard, { i: posI, j: posJ });
   } else {
-    var cellSelector = "." + getClassName({ i: posI, j: posJ });
-    var elCell = document.querySelector(cellSelector);
-    elCell.classList.toggle('mine')
-    renderCell({ i: posI, j: posJ },MINE)
+    elCell.classList.toggle("mine");
+    renderCell({ i: posI, j: posJ }, MINE);
     gameOver();
   }
 }
@@ -167,19 +190,20 @@ function renderCell(location, value) {
 }
 
 function gameOver() {
-  var elGameStat = document.querySelector('.gameStat');
-  elGameStat.innerText = 'game over !'
-  setTimeout(init,2000) 
+  var elGameStat = document.querySelector(".gameStat");
+  elGameStat.innerText = "game over !";
+  setTimeout(init, 2000);
+  clearInterval(gInterval)
 }
 
-
-function handleKey(event) {
-    var i = gBoard.i;
-    var j = gBoard.j;
-  
-    switch (event.MouseEvent) {
-      case "oncontextmenu":
-        renderCell({i:i, j:j},FLAG)
-        break;
-    }
+function flag(event) {
+  var pos = event.target;
+  getLocationByClassName(pos.className);
+  if (pos.innerText === FLAG) {
+    pos.innerText = "";
+    gBoard[getLocationByClassName(pos.className).i][getLocationByClassName(pos.className).j].isFlag = false;
+  } else if (pos.innerText === "") {
+    pos.innerText = FLAG;
+    gBoard[getLocationByClassName(pos.className).i][getLocationByClassName(pos.className).j].isFlag = true
   }
+}
