@@ -23,14 +23,20 @@ var gLife = 3;
 var gLastPos = [];
 
 function init() {
-  gBoard = buildBoard();
+  console.log(gLevel.MINES);
   document.querySelector(".win").innerText = "🙂";
   document.querySelector(".gameStat").innerText = "";
-  gIsFirstMove = true;
-  gGame.markedCount = 0;
-  gGame.shownCount = 0;
-  gTrueFlages = 0;
-  gLife = 3;
+  var myPlayerName = localStorage.getItem("playerName");
+  document.querySelector(
+    ".playerName"
+    ).innerHTML = `current player : ${myPlayerName}`;
+    gIsFirstMove = true;
+    gGame.markedCount = 0;
+    gGame.shownCount = 0;
+    gTrueFlages = 0;
+    gLife = 3;
+    gTime=0;
+    gBoard = buildBoard();
   renderBoard(gBoard);
 }
 
@@ -83,13 +89,14 @@ function cellClicked(posI, posJ) {
     }
     startTimer();
     var dateObjbegin = new Date();
-    var timeCounter = dateObjbegin.getTime();
+    gTimeCounter = dateObjbegin.getTime();
+    console.log(gTimeCounter);
     gIsFirstMove = false;
   }
-  if (gBoard[posI][posJ].isShown === false) return ;
+  if (!gBoard[posI][posJ].isShown) return;
   if (gBoard[posI][posJ].isFlag) return;
   if (gLastPos[0] === posI && gLastPos[1] === posJ) return;
-  else if (gBoard[posI][posJ].isShown === true) gBoard[posI][posJ].isShown = false;
+  gBoard[posI][posJ].isShown = false;
   var statsShown = document.querySelector(".statsShown");
   statsShown.innerText = `cells showen : ${gGame.shownCount} `;
   if (!gBoard[posI][posJ].isMine) {
@@ -97,6 +104,7 @@ function cellClicked(posI, posJ) {
     cheakNeighbors(gBoard, { i: posI, j: posJ });
   } else if (gBoard[posI][posJ].isMine) {
     gLife--;
+  
     var elLife = document.querySelector(".life");
     elLife.innerText = ` lives left : ${gLife}`;
     var cellSelector = "." + getClassName({ i: posI, j: posJ });
@@ -104,7 +112,7 @@ function cellClicked(posI, posJ) {
     elCell.classList.add("mine");
     renderCell({ i: posI, j: posJ }, MINE);
     setTimeout(() => {
-      gBoard[posI][posJ].isShown = true;
+       gBoard[posI][posJ].isShown = true;
       elCell.classList.remove("mine");
       renderCell({ i: posI, j: posJ }, "");
     }, 1000);
@@ -136,7 +144,7 @@ function cheakNeighbors(mat, pos) {
       if (mat[i][j].isMine) {
         count++;
       } else {
-        if (mat[i][j].isFlag === true) continue;
+        if (mat[i][j].isFlag) continue;
         positions.push({ i, j });
       }
     }
@@ -174,9 +182,9 @@ function renderCell(location, value) {
 }
 //game over
 function gameOver() {
+  resetTimer();
   var elGameStat = document.querySelector(".gameStat");
   elGameStat.innerText = "game over !";
-  resetTimer();
   document.querySelector(".win").innerText = "😤";
   setTimeout(init, 2000);
   clearInterval(gInterval);
@@ -190,7 +198,7 @@ function flag(event) {
     gBoard[getLocationByClassName(pos.className).i][
       getLocationByClassName(pos.className).j
     ];
-   if (!isCellFlag.isShown) return;
+  if (!isCellFlag.isShown) return;
   if (isCellFlag.isFlag) {
     pos.innerText = "";
     isCellFlag.isFlag = false;
@@ -204,8 +212,8 @@ function flag(event) {
     gGame.markedCount++;
     if (isCellFlag.isMine) {
       gTrueFlages++;
+      cheakVictory();
     }
-    cheakVictory();
   }
 
   var statsMarked = document.querySelector(".statsMarked");
@@ -216,36 +224,32 @@ function cheakVictory() {
   var numOfCells = gLevel.SIZE ** 2;
   if (numOfCells - gGame.shownCount - gTrueFlages === 0) {
     stopTimer();
-
-    // work in progress on bounos
-    // const dateObjbeginFliped = new Date();
-    // timeCounterNow = dateObjbeginFliped.getTime();
-    // timePassed = parseInt((timeCounterNow - timeCounterFirstFlip) / 1000);
-    // if (timePassed > bestTime) {
-    //   if (firstWin === 0) {
-    //     bestTime = timePassed;
-    //     firstWin++;
-    //   }
-    // } else {
-    //   bestTime = timePassed;
-    // }
-    // localStorage.setItem("currante time", timePassed);
-    // localStorage.setItem("best time", bestTime);
-    // time = localStorage.getItem("currante time");
-    // winingTime = localStorage.getItem("best time");
-
-    // yourScore.innerHTML = `your score is: ${time}`;
-    // bestScore.innerHTML = `the best time is : ${winingTime}`;
-    // if (winingTime === time) {
-    //   // alert("you have reached the bset time ! well done ! ");
-    // }
-
+    const dateObjbegin = new Date();
+    gTimeCounterNow = dateObjbegin.getTime();
+    gTimePassed = parseInt((gTimeCounterNow - gTimeCounter) / 1000);
+    if (gTimePassed > gBestTime) {
+      if (gFirstWin === 0) {
+        gBestTime = gTimePassed;
+        gFirstWin++;
+      }
+    } else {
+      gBestTime = gTimePassed;
+    }
+    localStorage.setItem("currante time", gTimePassed);
+    localStorage.setItem("best time", gBestTime);
+    gTime = localStorage.getItem("currante time");
+    gWiningTime = localStorage.getItem("best time");
+    gYourScore.innerHTML = `your score is: ${gTime}`;
+    gBestScore.innerHTML = `the best time is : ${gWiningTime}`;
+    if (gWiningTime === gTime) {
+      alert("you have reached the bset time ! well done ! ");
+    }
     document.querySelector(".win").innerText = "😎";
     document.querySelector(".gameStat").innerText = "you won ! well done !";
     resetTimer();
-    setTimeout(init, 2000);
     clearInterval(gInterval);
     gInterval = null;
+    setTimeout(init, 2000);
   }
 }
 // choose game level by user
@@ -257,6 +261,7 @@ function gameLevel() {
     gLevel.MINES = 12;
     clearInterval(gInterval);
     gInterval = null;
+    resetTimer();
     init();
   }
 
@@ -265,6 +270,20 @@ function gameLevel() {
     gLevel.MINES = 30;
     clearInterval(gInterval);
     gInterval = null;
+    resetTimer();
     init();
   }
+  if (level === "Beginner") {
+    gLevel.SIZE = 4;
+    gLevel.MINES = 2;
+    clearInterval(gInterval);
+    gInterval = null;
+    resetTimer();
+    init();
+  }
+}
+//keep on local storage player name
+function playerName() {
+  var player = document.getElementById("player").value;
+  localStorage.setItem("playerName", player);
 }
