@@ -1,0 +1,47 @@
+.body{
+    background-color: beige;
+}
+.playerName  {
+    font-family: monospace;
+    text-align: center;
+    font-size: 30px;
+float: right;
+padding-right: 90px;
+  }
+  .playerInfo{
+    font-family: monospace;
+    text-align: center;
+    font-size: 30px;
+    float: right;
+    padding-right: 20%;
+  }
+  img {
+      width: 300px;
+      height: 400px;
+    float:left;
+    padding-bottom: 40px;
+    padding-left: 20px;
+  }
+  .headLine {
+    font-family: monospace;
+    color: teal;
+    text-align: center;
+    font-size: 40px;
+    /* padding-right: 60%; */
+    margin: auto;
+        padding-left: 50px;
+        margin-left: 40px;
+        
+
+  }
+  button {
+    font: 20px black solid;
+    background-color: rgb(214, 36, 214);
+    transition: 1000ms;
+    font-family: monospace;
+  }
+  
+  h1 span {
+    color: tomato;
+  }
+  
