@@ -1,69 +1,67 @@
-var hr = 0;
-var min = 0;
-var sec = 0;
-var stoptime = true;
-var timePassed = 0;
-var timeCounterNow;
-var timer = document.querySelector(".timePassed");
-var winingTime;
-var firstWin = 0;
-var time;
-var timeCounterFirstFlip;
-var firstCall = 0;
-var bestTime = 0;
-var player = "";
-var yourScore = document.querySelector(".yourScore");
-var bestScore = document.querySelector(".bestScore");
+var gHr = 0;
+var gMin = 0;
+var gSec = 0;
+var gStoptime = true;
+var gTimePassed = 0;
+var gTimeCounterNow;
+var gTimeCounter;
+var gWiningTime;
+var gFirstWin = 0;
+var gTime;
+var gTimer = document.querySelector(".timePassed")
+var gBestTime = 0;
+var gPlayer = "";
+var gYourScore = document.querySelector(".yourScore");
+var gBestScore = document.querySelector(".bestScore");
 
 function startTimer() {
-  if (stoptime === true) {
-    stoptime = false;
+  if (gStoptime === true) {
+    gStoptime = false;
     timerCycle();
   }
 }
 function stopTimer() {
-  if (stoptime === false) {
-    stoptime = true;
+  if (gStoptime === false) {
+    gStoptime = true;
   }
 }
-
 function timerCycle() {
-  if (stoptime === false) {
-    sec = parseInt(sec);
-    min = parseInt(min);
-    hr = parseInt(hr);
+  if (gStoptime === false) {
+    gSec = parseInt(gSec);
+    gMin = parseInt(gMin);
+    gHr = parseInt(gHr);
 
-    sec = sec + 1;
+    gSec = gSec + 1;
 
-    if (sec === 60) {
-      min = min + 1;
-      sec = 0;
+    if (gSec === 60) {
+      gMin = gMin + 1;
+      gSec = 0;
     }
-    if (min === 60) {
-      hr = hr + 1;
-      min = 0;
-      sec = 0;
-    }
-
-    if (sec < 10 || sec === 0) {
-      sec = "0" + sec;
-    }
-    if (min < 10 || min === 0) {
-      min = "0" + min;
-    }
-    if (hr < 10 || hr === 0) {
-      hr = "0" + hr;
+    if (gMin === 60) {
+      gHr = gHr + 1;
+      gMin = 0;
+      gSec = 0;
     }
 
-    timer.innerHTML = hr + ":" + min + ":" + sec;
+    if (gSec < 10 || gSec === 0) {
+      gSec = "0" + gSec;
+    }
+    if (gMin < 10 || gMin === 0) {
+      gMin = "0" + gMin;
+    }
+    if (gHr < 10 || gHr === 0) {
+      gHr = "0" + gHr;
+    }
+
+    gTimer.innerHTML = gHr + ":" + gMin + ":" + gSec;
 
     setTimeout("timerCycle()", 1000);
   }
 }
 function resetTimer() {
-  timer.innerHTML = "00:00:00";
-  stoptime = true;
-  hr = 0;
-  sec = 0;
-  min = 0;
+  gTimer.innerHTML = "00:00:00";
+  gStoptime = true;
+  gHr = 0;
+  gSec = 0;
+  gMin = 0;
 }
